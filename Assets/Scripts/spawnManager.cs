@@ -5,9 +5,9 @@ using TMPro;
 
 public class SpawnManager : MonoBehaviour
 {
-    //public GameObject enemyPrefab;
-    public List<GameObject> enemyList;
     public GameObject enemyPrefab;
+    public List<GameObject> enemyList;
+    
     public GameObject powerupPrefab;
 
     private float spawnRange = 9;
@@ -16,13 +16,18 @@ public class SpawnManager : MonoBehaviour
     public int waveNumber; //var que cuenta la cant de waves
 
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI waveText;
+
     private int score;
+
+    //private float spawnRate = 1.0f; // Tiempo en el que sea spawnean los enemys
 
     // Start is called before the first frame update
     void Start()
     {
         SpawnEnemyWave(waveNumber);
         SpawnpowerupWave(waveNumber);
+        //StartCoroutine(SpawnEnemys());
 
         score = 0;
         UpdateScore(0);
@@ -41,7 +46,9 @@ public class SpawnManager : MonoBehaviour
     {
         for(int i = 0; i < enemyToSpawn; i++)
         {
-            Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
+           
+            int index = Random.Range(0, enemyList.Count); // Recorre toda la lista de enemys
+            Instantiate(enemyList[index], GenerateSpawnPosition(), enemyList[index].transform.rotation);
         }
     }
 
@@ -52,6 +59,16 @@ public class SpawnManager : MonoBehaviour
             Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
         }
     }
+
+    //IEnumerator SpawnEnemys() //Spawnea enemys de enemyList por seg
+    //{
+    //    while (true)
+    //    {
+    //        yield return new WaitForSeconds(spawnRate);
+    //        int index = Random.Range(0, enemyList.Count);
+    //        Instantiate(enemyList[index]);
+    //    }
+    //}
 
     // Update is called once per frame
     void Update()
@@ -65,6 +82,7 @@ public class SpawnManager : MonoBehaviour
             SpawnpowerupWave(waveNumber - 1);
         }
         //Debug.Log("Wave Number: " + waveNumber);
+        waveText.text = "Wave Number: " + waveNumber;
         
     }
 
