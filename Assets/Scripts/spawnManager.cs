@@ -1,26 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class spawnManager : MonoBehaviour
+public class SpawnManager : MonoBehaviour
 {
+    //public GameObject enemyPrefab;
+    public List<GameObject> enemyList;
     public GameObject enemyPrefab;
     public GameObject powerupPrefab;
 
     private float spawnRange = 9;
 
     public int enemyCount; // var que cuenta la cant de enemys
-    public int waveNumber = 1; //var que cuenta la cant de waves
+    public int waveNumber; //var que cuenta la cant de waves
 
-    public int powerupCount;
-    
+    public TextMeshProUGUI scoreText;
+    private int score;
 
     // Start is called before the first frame update
     void Start()
     {
         SpawnEnemyWave(waveNumber);
         SpawnpowerupWave(waveNumber);
-        
+
+        score = 0;
+        UpdateScore(0);
     }
 
     private Vector3 GenerateSpawnPosition()
@@ -39,6 +44,7 @@ public class spawnManager : MonoBehaviour
             Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
         }
     }
+
     void SpawnpowerupWave(int powerupToSpawn) //Mothod que spawnea powerups
     {
         for(int i = 0; i < powerupToSpawn; i++)
@@ -46,6 +52,7 @@ public class spawnManager : MonoBehaviour
             Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
         }
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -57,6 +64,19 @@ public class spawnManager : MonoBehaviour
             SpawnEnemyWave(waveNumber);
             SpawnpowerupWave(waveNumber - 1);
         }
-       
+        //Debug.Log("Wave Number: " + waveNumber);
+        
+    }
+
+    public void UpdateScore(int scoreToAdd)
+    {
+        score += scoreToAdd;
+        scoreText.text = "Enemys Destroyed: " + score;
+        if (enemyPrefab.transform.position.y < -8)
+        {
+            score++; //updatea 1 punto si enemyPrefab cae de la platform
+            
+        }
+        
     }
 }

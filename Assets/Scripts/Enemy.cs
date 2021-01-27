@@ -8,11 +8,16 @@ public class Enemy : MonoBehaviour
     private Rigidbody enemyRb;
     private GameObject player;
 
+    private SpawnManager spawnManager; //escucha al script Spawn Manager
+
+    public int pointValue; // puntaje de cada prefab
+
     // Start is called before the first frame update
     void Start()
     {
         enemyRb = GetComponent<Rigidbody>();
         player = GameObject.Find("Player");
+        spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
     }
 
     // Update is called once per frame
@@ -23,8 +28,11 @@ public class Enemy : MonoBehaviour
 
         if (transform.position.y < -10)
         {
+            
             Destroy(gameObject);
+            spawnManager.UpdateScore(pointValue);
+            
         }
-
+        
     }
 }
