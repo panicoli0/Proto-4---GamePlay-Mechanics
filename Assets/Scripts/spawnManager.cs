@@ -5,18 +5,21 @@ using TMPro;
 
 public class SpawnManager : MonoBehaviour
 {
-    public GameObject enemyPrefab;
+
     public List<GameObject> enemyList;
     
     public GameObject powerupPrefab;
 
     private float spawnRange = 9;
 
-    public int enemyCount; // var que cuenta la cant de enemys
-    public int waveNumber; //var que cuenta la cant de waves
+    public int enemyCount; //Cuenta la cant de enemys
+    public int waveNumber; //Cuenta la cant de waves
 
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI waveText;
+    public TextMeshProUGUI gameOverText;
+
+    public bool isGameActive;
 
     private int score;
 
@@ -27,10 +30,12 @@ public class SpawnManager : MonoBehaviour
     {
         SpawnEnemyWave(waveNumber);
         SpawnpowerupWave(waveNumber);
-        //StartCoroutine(SpawnEnemys());
 
         score = 0;
         UpdateScore(0);
+
+        isGameActive = true;
+        
     }
 
     private Vector3 GenerateSpawnPosition()
@@ -46,9 +51,12 @@ public class SpawnManager : MonoBehaviour
     {
         for(int i = 0; i < enemyToSpawn; i++)
         {
-           
-            int index = Random.Range(0, enemyList.Count); // Recorre toda la lista de enemys
-            Instantiate(enemyList[index], GenerateSpawnPosition(), enemyList[index].transform.rotation);
+            if (isGameActive)
+            {
+                int index = Random.Range(0, enemyList.Count); // Recorre toda la lista de enemys
+                Instantiate(enemyList[index], GenerateSpawnPosition(), enemyList[index].transform.rotation);
+            }
+            
         }
     }
 
@@ -56,26 +64,19 @@ public class SpawnManager : MonoBehaviour
     {
         for(int i = 0; i < powerupToSpawn; i++)
         {
-            Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
+            if (isGameActive)
+            {
+                Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
+            }
         }
     }
-
-    //IEnumerator SpawnEnemys() //Spawnea enemys de enemyList por seg
-    //{
-    //    while (true)
-    //    {
-    //        yield return new WaitForSeconds(spawnRate);
-    //        int index = Random.Range(0, enemyList.Count);
-    //        Instantiate(enemyList[index]);
-    //    }
-    //}
 
     // Update is called once per frame
     void Update()
     {
         enemyCount = FindObjectsOfType<Enemy>().Length; // Busca los enemys y devuelve la cant. (int)
 
-        if(enemyCount == 0) // si la cant de enemys es 0
+        if(enemyCount == 0 && isGameActive) // si la cant de enemys es 0 y isGameActive verdadero
         {
             waveNumber++; // sumale a waveNumber
             SpawnEnemyWave(waveNumber);
@@ -90,11 +91,17 @@ public class SpawnManager : MonoBehaviour
     {
         score += scoreToAdd;
         scoreText.text = "Enemys Destroyed: " + score;
-        if (enemyPrefab.transform.position.y < -8)
+        int index = Random.Range(0, enemyList.Count);
+        if (enemyList[index].transform.position.y < -8)
         {
             score++; //updatea 1 punto si enemyPrefab cae de la platform
             
         }
         
+    }
+    public void GameOver()
+    {
+        gameOverText.gameObject.SetActive(true);
+        isGameActive = false;
     }
 }

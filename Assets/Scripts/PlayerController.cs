@@ -30,13 +30,14 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-            if (other.CompareTag("Powerup"))
+        if (other.CompareTag("Powerup"))
         {
             hasPowerup = true;
             Destroy(other.gameObject);
             StartCoroutine(PowerUpConuntdownRoutine());
             powerUpIndicator.gameObject.SetActive(true);
         }
+
     }
     private void OnCollisionEnter(Collision collision)
     {
