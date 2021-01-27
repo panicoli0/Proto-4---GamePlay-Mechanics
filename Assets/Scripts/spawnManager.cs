@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -18,6 +20,7 @@ public class SpawnManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI waveText;
     public TextMeshProUGUI gameOverText;
+    public Button restartButton;
 
     public bool isGameActive;
 
@@ -103,5 +106,10 @@ public class SpawnManager : MonoBehaviour
     {
         gameOverText.gameObject.SetActive(true);
         isGameActive = false;
+        restartButton.gameObject.SetActive(true);
+    }
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
