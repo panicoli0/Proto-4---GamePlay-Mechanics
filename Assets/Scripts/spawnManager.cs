@@ -13,6 +13,7 @@ public class SpawnManager : MonoBehaviour
     public GameObject powerupPrefab;
 
     private float spawnRange = 9;
+    private float spawnRate = 10.0f;
 
     public int enemyCount; //Cuenta la cant de enemys
     public int waveNumber; //Cuenta la cant de waves
@@ -32,8 +33,7 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        
+
     }
 
     private Vector3 GenerateSpawnPosition()
@@ -47,23 +47,38 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnEnemyWave(int enemyToSpawn) //Method que spwnea enemys
     {
-        for(int i = 0; i < enemyToSpawn; i++)
+
+        for (int i = 0; i < enemyToSpawn; i++)
         {
+            //yield return new WaitForSeconds(spawnRate);
             if (isGameActive)
             {
+                //enemyToSpawn *= spawnRate;
                 int index = Random.Range(0, enemyList.Count); // Recorre toda la lista de enemys
-                Instantiate(enemyList[index], GenerateSpawnPosition(), enemyList[index].transform.rotation);
+                Instantiate(enemyList[index], GenerateSpawnPosition(), enemyList[index].transform.rotation); //Agarra un ebjeto enemy, le da una pos random
             }
-            
+
+        }
+    }
+
+    IEnumerator SpawnTarget()
+    {
+        while(isGameActive)
+        {
+            yield return new WaitForSeconds(spawnRate);
+            int index = Random.Range(0, enemyList.Count);
+            Instantiate(enemyList[index]);
         }
     }
 
     void SpawnpowerupWave(int powerupToSpawn) //Mothod que spawnea powerups
     {
+        //powerupToSpawn *= spawnRate;
         for(int i = 0; i < powerupToSpawn; i++)
         {
             if (isGameActive)
             {
+                //yield return new WaitForSeconds(spawnRate);
                 Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
             }
         }
@@ -78,9 +93,9 @@ public class SpawnManager : MonoBehaviour
         {
             waveNumber++; // sumale a waveNumber
             SpawnEnemyWave(waveNumber);
+            StartCoroutine(SpawnTarget());
             SpawnpowerupWave(waveNumber - 1);
         }
-        //Debug.Log("Wave Number: " + waveNumber);
         waveText.text = "Wave Number: " + waveNumber;
         
     }
@@ -108,10 +123,14 @@ public class SpawnManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-    public void StartGame()
+    public void StartGame(int difficulty)
     {
+        spawnRate /= difficulty;
+        Debug.Log("La dificultad selecionada fue: " + difficulty);
+
         SpawnEnemyWave(waveNumber);
         SpawnpowerupWave(waveNumber);
+        StartCoroutine(SpawnTarget());
 
         score = 0;
         UpdateScore(0);

@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
 
     private float powerupStrength = 15.0f;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -25,8 +24,8 @@ public class PlayerController : MonoBehaviour
     {
         float forwardInput = Input.GetAxis("Vertical");
         playerRb.AddForce(focalPoint.transform.forward * speed * forwardInput);
-
         powerUpIndicator.transform.position = transform.position + new Vector3(0, -0.5f, 0); // Cuando agarras el powerUp que el indicator siga al Player
+        
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -45,9 +44,7 @@ public class PlayerController : MonoBehaviour
         {
             Rigidbody enemyRb = collision.gameObject.GetComponent<Rigidbody>();
             Vector3 awayFromPlayer = (collision.gameObject.transform.position - transform.position);
-            
-            //Debug.Log("Collide with: " + collision.gameObject.name + "with a power up set to" + hasPowerup);
-
+           
             enemyRb.AddForce(awayFromPlayer * powerupStrength, ForceMode.Impulse);
         }
 

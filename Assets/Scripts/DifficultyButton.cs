@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FuncionalityButton : MonoBehaviour
+public class DifficultyButton : MonoBehaviour
 {
     private Button button;
     private SpawnManager spawnManager;
+    public int difficulty;
 
     // Start is called before the first frame update
     void Start()
     {
         button = GetComponent<Button>();
-        spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+        spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         button.onClick.AddListener(SetDifficulty);
     }
 
@@ -23,6 +24,7 @@ public class FuncionalityButton : MonoBehaviour
     }
     void SetDifficulty()
     {
-        spawnManager.StartGame();
+        spawnManager.StartGame(difficulty);
+        
     }
 }
