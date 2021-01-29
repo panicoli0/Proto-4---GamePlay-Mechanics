@@ -1,4 +1,7 @@
-# Proto-4-GamePlay-Mechanics
+#Boomer Ball
+https://panicoli0.itch.io/boomer-ball 
+
+Proto-4-GamePlay-Mechanics
  
 * Apply Physics Materials to make game objects more or less bouncy
 * Calculate new vectors to steer objects in custom directions
