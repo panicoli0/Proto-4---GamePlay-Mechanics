@@ -9,11 +9,11 @@ public class SpawnManager : MonoBehaviour
 {
 
     public List<GameObject> enemyList;
-    
+
     public GameObject powerupPrefab;
 
     private float spawnRange = 9;
-    private float spawnRate = 10.0f;
+    private float spawnRate = 10.0f; // Tiempo en el que sea spawnean los enemys
 
     public int enemyCount; //Cuenta la cant de enemys
     public int waveNumber; //Cuenta la cant de waves
@@ -28,7 +28,6 @@ public class SpawnManager : MonoBehaviour
 
     private int score;
 
-    //private float spawnRate = 1.0f; // Tiempo en el que sea spawnean los enemys
 
     // Start is called before the first frame update
     void Start()
@@ -50,10 +49,8 @@ public class SpawnManager : MonoBehaviour
 
         for (int i = 0; i < enemyToSpawn; i++)
         {
-            //yield return new WaitForSeconds(spawnRate);
             if (isGameActive)
             {
-                //enemyToSpawn *= spawnRate;
                 int index = Random.Range(0, enemyList.Count); // Recorre toda la lista de enemys
                 Instantiate(enemyList[index], GenerateSpawnPosition(), enemyList[index].transform.rotation); //Agarra un ebjeto enemy, le da una pos random
             }
@@ -61,9 +58,9 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnTarget()
+    IEnumerator SpawnTarget() //Spawnea enemys por tiempo segun difficulty elegida
     {
-        while(isGameActive)
+        while (isGameActive)
         {
             yield return new WaitForSeconds(spawnRate);
             int index = Random.Range(0, enemyList.Count);
@@ -73,12 +70,10 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnpowerupWave(int powerupToSpawn) //Mothod que spawnea powerups
     {
-        //powerupToSpawn *= spawnRate;
-        for(int i = 0; i < powerupToSpawn; i++)
+        for (int i = 0; i < powerupToSpawn; i++)
         {
             if (isGameActive)
             {
-                //yield return new WaitForSeconds(spawnRate);
                 Instantiate(powerupPrefab, GenerateSpawnPosition(), powerupPrefab.transform.rotation);
             }
         }
@@ -89,7 +84,7 @@ public class SpawnManager : MonoBehaviour
     {
         enemyCount = FindObjectsOfType<Enemy>().Length; // Busca los enemys y devuelve la cant. (int)
 
-        if(enemyCount == 0 && isGameActive) // si la cant de enemys es 0 y isGameActive verdadero
+        if (enemyCount == 0 && isGameActive) // si la cant de enemys es 0 y isGameActive verdadero
         {
             waveNumber++; // sumale a waveNumber
             SpawnEnemyWave(waveNumber);
@@ -97,7 +92,7 @@ public class SpawnManager : MonoBehaviour
             SpawnpowerupWave(waveNumber - 1);
         }
         waveText.text = "Wave Number: " + waveNumber;
-        
+
     }
 
     public void UpdateScore(int scoreToAdd)
@@ -108,25 +103,27 @@ public class SpawnManager : MonoBehaviour
         if (enemyList[index].transform.position.y < -8)
         {
             score++; //updatea 1 punto si enemyPrefab cae de la platform
-            
+
         }
-        
+
     }
-    public void GameOver()
+    public void GameOver() // Para el juego
     {
         gameOverText.gameObject.SetActive(true);
         isGameActive = false;
         restartButton.gameObject.SetActive(true);
-        
+
     }
-    public void RestartGame()
+
+    public void RestartGame() // Resetea el juego
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-    public void StartGame(int difficulty)
+
+    public void StartGame(int difficulty) // inicia el game
     {
         spawnRate /= difficulty;
-        Debug.Log("La dificultad selecionada fue: " + difficulty);
+        //Debug.Log("La dificultad selecionada fue: " + difficulty);
 
         SpawnEnemyWave(waveNumber);
         SpawnpowerupWave(waveNumber);

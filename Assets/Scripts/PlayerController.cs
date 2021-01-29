@@ -44,14 +44,13 @@ public class PlayerController : MonoBehaviour
         {
             Rigidbody enemyRb = collision.gameObject.GetComponent<Rigidbody>();
             Vector3 awayFromPlayer = (collision.gameObject.transform.position - transform.position);
-           
             enemyRb.AddForce(awayFromPlayer * powerupStrength, ForceMode.Impulse);
         }
 
     }
     IEnumerator PowerUpConuntdownRoutine()
     {
-        yield return new WaitForSeconds(5); //Updatea una funcion fuera de Update()
+        yield return new WaitForSeconds(5);
         hasPowerup = false;
         powerUpIndicator.gameObject.SetActive(false);
     }
