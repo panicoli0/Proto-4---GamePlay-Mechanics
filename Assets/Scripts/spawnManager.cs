@@ -98,7 +98,7 @@ public class SpawnManager : MonoBehaviour
     public void UpdateScore(int scoreToAdd)
     {
         score += scoreToAdd;
-        scoreText.text = "Enemys Destroyed: " + score;
+        scoreText.text = "Points: " + score;
         int index = Random.Range(0, enemyList.Count);
         if (enemyList[index].transform.position.y < -8)
         {
