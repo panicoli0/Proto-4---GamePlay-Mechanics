@@ -1,5 +1,9 @@
 #Boomer Ball
+
+With Multiplayer option now! Play 🕹️ vs 🕹️ with friends up to 20 players on the same room
+
 https://panicoli0.itch.io/boomer-ball 
+
 
 Proto-4-GamePlay-Mechanics
  
